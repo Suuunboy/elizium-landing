@@ -4,9 +4,14 @@
    official design system (no Material, Fluent, Carbon or Polaris here). Built
    with native CSS custom properties.
 
-   Redesign mode: Overhaul. Visual language rebuilt, brand token layer
-   preserved (accent hue, type stack, logo, 20/10 radius family).
-   Dials: DESIGN_VARIANCE 7, MOTION_INTENSITY 6, VISUAL_DENSITY 4.
+   Redesign mode: Preserve. The visual language from the previous overhaul is
+   sound and stays; what changed is the subject. The page is now about the
+   device, not the company, so the hero carries the product and the brand is
+   demoted to nav, footer and favicon.
+   Dials: DESIGN_VARIANCE 7, MOTION_INTENSITY 7, VISUAL_DENSITY 4. The motion
+   step is not decoration: retiring the hero photograph deleted the page's one
+   scroll-driven animation, so the level had to be re-earned inside the same
+   90ms quantize grid rather than lost.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -63,15 +68,18 @@
   --accent-glow: rgba(232, 116, 84, 0.20);
   --plane-accent: #1E120D;  /* accent-tinted close, still inside the dark family */
   --shade:       rgba(0, 0, 0, 0.45);
-  --hero-treat:  grayscale(0.55) brightness(0.44) contrast(1.14);
 
   /* one radius rule: surfaces 20px (brand token), controls 10px */
   --r-surface: 20px;
   --r-control: 10px;
 
   /* type scale: five distinct steps plus display, so the page does not
-     collapse to one loud moment followed by flat body text */
-  --fs-display:   clamp(2.75rem, 7.4vw, 6.5rem);
+     collapse to one loud moment followed by flat body text.
+     The display step is retuned down from a 6.5rem cap: it used to set the
+     seven-letter wordmark ЭЛИЗИУМ, and now sets a 34-character product name.
+     At the old cap that headline ran four lines and pushed the CTA off the
+     fold. Same scale, same ratios, one step re-fitted to its new content. */
+  --fs-display:   clamp(2.125rem, 5vw, 3.875rem);
   --fs-h2:        clamp(2rem, 4.6vw, 3.5rem);
   --fs-statement: clamp(1.375rem, 2.9vw, 2.25rem);
   --fs-h3:        clamp(1.3125rem, 2.2vw, 1.75rem);
@@ -340,9 +348,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 /* --------------------------------------------------------------------------
    6. Hero. Layout family A: asymmetric split.
-   Type block left, brand mark right, photograph demoted from subject to a
-   treated texture layer behind both. Preserves the brand's inset card and
-   20px radius.
+   Type block left, the device itself right. The photograph of third-party
+   hardware is gone, and the brand watermark with it: the product is the
+   subject of the page now, so nothing else competes for the slot. Preserves
+   the brand's inset card, the 20px radius and the 1.08 / 0.92 column ratio.
    -------------------------------------------------------------------------- */
 .hero { padding: var(--gutter); }
 
@@ -355,37 +364,14 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: grid;
   grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
   align-items: center;
-  /* Fixed dark in BOTH modes. This is a photographic surface and the copy on it
-     is always light, so the pre-load fallback must never resolve to a light
-     token: that would render near-white text on a near-white card. */
-  background: #14110B;
-}
-
-.hero__media {
-  position: absolute;
-  inset: 0;
-  z-index: -3;
-}
-.hero__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 45%;
-  /* The photograph is stock hardware from other manufacturers. Treated down to
-     a texture so it reads as material, not as a product claim. */
-  filter: var(--hero-treat);
-}
-
-/* preserved brand tint: the old rgba(51,36,0) warm-black wash, re-weighted to
-   pool behind the left-hand type block, plus a single accent glow */
-.hero__veil {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  background:
-    radial-gradient(120% 90% at 8% 62%, rgba(33, 24, 0, 0.42) 0%, rgba(10, 8, 5, 0.92) 58%),
-    linear-gradient(90deg, rgba(8, 6, 4, 0.94) 0%, rgba(8, 6, 4, 0.62) 46%, rgba(8, 6, 4, 0.80) 100%),
-    radial-gradient(70% 55% at 78% 22%, var(--accent-glow) 0%, transparent 62%);
+  /* Fixed dark in BOTH modes, and the accent glow with it. This card is the
+     brand's dark expression surviving light mode, so every value on it is
+     literal rather than tokenised: a light-mode token here would put
+     near-white type on a near-white card. The glow sits behind the render,
+     which is a near-black cut-out and would otherwise sink into the card. */
+  background-color: #14110B;
+  background-image:
+    radial-gradient(58% 52% at 74% 46%, rgba(232, 116, 84, 0.20) 0%, transparent 68%);
 }
 
 /* faceplate hairline grid, the material cue that ties the page together */
@@ -399,191 +385,127 @@ ul { margin: 0; padding: 0; list-style: none; }
   mask-image: radial-gradient(80% 70% at 74% 45%, #000 0%, transparent 78%);
 }
 
-.hero__mark {
-  grid-column: 2;
-  justify-self: center;
-  align-self: center;
-  width: min(38vw, 340px);
-  height: auto;
-  opacity: 0.13;
-  pointer-events: none;
-}
-
 .hero__content {
   grid-column: 1;
   padding-inline: clamp(1.75rem, 4.5vw, 4.25rem);
   padding-block: clamp(2.5rem, 6vw, 5.25rem);   /* under the 6rem desktop cap */
-  max-width: 44rem;
+  max-width: 46rem;   /* wide enough to hold the headline to two lines */
 }
 
 .hero__title {
   font-size: var(--fs-display);
   font-weight: 800;
-  line-height: 0.9;
-  letter-spacing: -0.045em;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
   color: #F7F5F0;
   margin-bottom: clamp(1rem, 2vw, 1.75rem);
+  text-wrap: balance;
 }
 
 .hero__lead {
   font-size: var(--fs-lead);
   line-height: 1.5;
   color: #E4E0D8;
-  max-width: 34ch;
+  max-width: 38ch;
   margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
 }
 
-/* The hero card stays dark in both modes, so the brand's dark expression
-   survives light mode. No border is needed: the dark card separates itself
-   from the light ground on its own. */
+/* The page's primary action, and the first one this site has ever had. The
+   accent pair is literal for the same reason the type is: this card does not
+   follow the page's light tokens. 6.39:1 on the button, AA. */
+.hero__cta {
+  display: inline-block;
+  padding: 0.875rem 1.5rem;
+  border-radius: var(--r-control);
+  background: #E87454;
+  color: #12100C;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.27s var(--ease), transform 0.27s var(--ease);
+}
+.hero__cta:hover { background: #F08A6B; }
+@media (prefers-reduced-motion: no-preference) {
+  .hero__cta:hover { transform: translateY(-2px); }
+}
+
+.hero__figure {
+  grid-column: 2;
+  margin: 0;
+  justify-self: center;
+  align-self: center;
+  display: grid;
+  justify-items: center;
+  gap: var(--s-3);
+  padding: clamp(1rem, 3vw, 2.5rem);
+  min-width: 0;
+}
+.hero__figure img {
+  max-height: min(58vh, 520px);
+  width: auto;
+  filter: drop-shadow(0 26px 44px rgba(0, 0, 0, 0.55));
+}
 
 @media (max-width: 1023px) {
-  .hero__card { grid-template-columns: 1fr; }
-  .hero__mark {
-    grid-column: 1;
-    grid-row: 1;
-    justify-self: end;
-    align-self: start;
-    width: min(46vw, 260px);
-    margin: clamp(1.5rem, 5vw, 3rem);
-    opacity: 0.10;
-  }
-  .hero__content { grid-column: 1; grid-row: 1; max-width: none; }
+  .hero__card { grid-template-columns: 1fr; align-content: center; }
+  .hero__content { grid-column: 1; max-width: none; }
+  .hero__figure { grid-column: 1; padding-top: 0; }
+  .hero__figure img { max-height: min(42vh, 420px); }
 }
 
 @media (max-width: 767px) {
-  .hero__card {
-    min-height: calc(100dvh - var(--nav-h) - (var(--gutter) * 2));
-    align-items: end;
-  }
+  .hero__card { min-height: calc(100dvh - var(--nav-h) - (var(--gutter) * 2)); }
   .hero__lead { max-width: none; }
-  .hero__mark { width: 42vw; }
+  .hero__figure img { max-height: 34vh; }
 }
 
 /* --------------------------------------------------------------------------
-   7. About. Layout family B: typographic asymmetric grid, no image.
+   7. Product intro. Layout family B: typographic asymmetric grid, no image.
    Header stacks vertically (no split-header), body indents on a later row.
-   -------------------------------------------------------------------------- */
-.about { padding-block: var(--space-section); }
-
-.about__grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-}
-
-.about__head { grid-column: 1 / 9; }
-
-/* Same slot as .product__sub, so same treatment. The accent is reserved for a
-   single role on this page: action and data. It is not a decorative text
-   colour. */
-.about__sub {
-  margin-top: var(--s-3);
-  font-size: var(--fs-lead);
-  font-weight: 400;
-  color: var(--ink-muted);
-  max-width: 34ch;
-}
-
-.about__body {
-  grid-column: 4 / 12;
-  margin-top: clamp(1rem, 3vw, 2.75rem);
-}
-
-@media (max-width: 767px) {
-  .about__grid { grid-template-columns: 1fr; }
-  .about__head, .about__body { grid-column: 1; }
-  .about__body { margin-top: 0.5rem; }
-}
-
-/* --------------------------------------------------------------------------
-   8. Product. Layout family C: stacked section head carrying the statement.
+   This slot used to hold the company section. It now carries the device's
+   technical description, so the page never leaves its subject.
    -------------------------------------------------------------------------- */
 .product {
   padding-top: var(--space-section);
   border-top: 1px solid var(--line);
 }
 
-.product__head { margin-bottom: var(--space-block); max-width: 60rem; }
+.product__grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
 
+.product__head { grid-column: 1 / 9; }
+
+/* The accent is reserved for a single role on this page: action and data. It
+   is not a decorative text colour, so this sub-line takes muted ink. */
 .product__sub {
   margin-top: var(--s-3);
   font-size: var(--fs-lead);
+  font-weight: 400;
   color: var(--ink-muted);
-  max-width: 40ch;
+  max-width: 44ch;
 }
 
-/* --------------------------------------------------------------------------
-   9. Device. Layout family D: media panel plus offset text.
-   The panel sketch is a light asset, so it sits on its own framed plate.
-   -------------------------------------------------------------------------- */
-.device {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: clamp(1.75rem, 4vw, 3.5rem);
-  align-items: start;
-}
-
-/* The render is a cut-out on transparency and the device itself is near-black,
-   so it needs a lighter stage behind it or it disappears into the dark ground.
-   The warm glow doubles as separation and as the accent's presence here. */
-.device__figure {
-  grid-column: 1 / 6;
-  margin: 0;
-  border-radius: var(--r-surface);
-  overflow: hidden;
-  border: 1px solid var(--line);
-  background-color: var(--stage);
-  background-image:
-    radial-gradient(58% 48% at 50% 38%, var(--accent-soft) 0%, transparent 72%),
-    var(--grid-fine);
-  box-shadow: 0 24px 60px -40px var(--shade);
-}
-.device__figure img {
-  width: 100%;
-  padding: clamp(1.25rem, 3vw, 2.5rem);
-  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.45));
-  transition: transform 0.63s var(--ease);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .device__figure:hover img { transform: scale(1.025); }
-}
-
-.device__caption {
-  padding: var(--s-3) var(--s-4);
-  border-top: 1px solid var(--line);
-  font-size: var(--fs-xs);
-  color: var(--ink-faint);
-  background: var(--surface);
-}
-
-.device__text {
-  grid-column: 6 / 13;
-  margin-top: clamp(0rem, 3vw, 2.5rem);   /* the offset that breaks the symmetry */
+.product__body {
+  grid-column: 4 / 12;
+  margin-top: clamp(1rem, 3vw, 2.75rem);   /* the offset that breaks the symmetry */
   display: grid;
   gap: var(--s-4);
 }
-.device__text p {
-  color: var(--ink-muted);
-  max-width: 46ch;
-}
-.device__text .h3 { color: var(--ink); max-width: 20ch; }
+.product__body p { color: var(--ink-muted); max-width: 60ch; }
+.product__body .lead { color: var(--ink); }
 
-.device__kicker {
-  margin-top: calc(var(--s-4) * -1 + var(--s-2));
-  font-size: var(--fs-lead);
-  font-weight: 600;
-  color: var(--accent);
-}
-
-@media (max-width: 1023px) {
-  .device__figure { grid-column: 1 / 13; }
-  .device__text { grid-column: 1 / 13; margin-top: 0; }
-  .device__text p, .device__text .h3 { max-width: 62ch; }
+@media (max-width: 767px) {
+  .product__grid { grid-template-columns: 1fr; }
+  .product__head, .product__body { grid-column: 1; }
+  .product__body { margin-top: 0.5rem; }
 }
 
 /* --------------------------------------------------------------------------
-   10. Specs. Layout family E: four-cell numeric grid on one panel.
+   8. Specs. Layout family E: four-cell numeric grid on one panel.
    Hairline-divided cells rather than four card boxes. The first cell carries
    the headline figure and gets the extra width.
    -------------------------------------------------------------------------- */
@@ -649,7 +571,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 /* --------------------------------------------------------------------------
-   11. Capabilities. Layout family F: asymmetric 1 + 2 grid.
+   9. Capabilities. Layout family F: asymmetric 1 + 2 grid.
    Exactly three cells for three items. Two of the three carry real background
    variation (accent wash, faceplate grid) so this is not a text-on-text grid.
    -------------------------------------------------------------------------- */
@@ -705,7 +627,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 /* --------------------------------------------------------------------------
-   12. Uses. Layout family G: the page's one full-bleed band.
+   10. Uses. Layout family G: the page's one full-bleed band.
    Three uses divided by vertical rules, no boxes.
    -------------------------------------------------------------------------- */
 .uses {
@@ -761,7 +683,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 /* --------------------------------------------------------------------------
-   13. Partners. Layout family H: credential band.
+   11. Partners. Layout family H: credential band.
    The mark is black-on-white artwork and must not be recoloured, so it keeps a
    light plate inside the dark page. That is a contained asset, not a section
    theme flip.
@@ -775,22 +697,53 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .partners__band {
   display: grid;
-  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
   gap: clamp(1.75rem, 4vw, 3.5rem);
-  align-items: center;
+  align-items: start;
+}
+
+/* Two marks now, stacked in the narrow column so each gets the full plate
+   width rather than half of it. Logos only, no category labels beneath. */
+.partners__plates {
+  display: grid;
+  gap: clamp(0.75rem, 1.5vw, 1.125rem);
 }
 
 .plate {
   background: var(--plate);
   border-radius: var(--r-control);
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  min-height: clamp(150px, 17vw, 210px);
+  padding: clamp(1.25rem, 2.4vw, 2rem);
+  min-height: clamp(128px, 13vw, 168px);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.27s var(--ease);
 }
-.plate img { max-height: clamp(84px, 10vw, 130px); width: auto; object-fit: contain; }
+.plate img {
+  max-height: clamp(72px, 8.4vw, 108px);
+  width: auto;
+  object-fit: contain;
+}
+
+/* The Platforma mark is not a cut-out like the FASIE one: it ships as a
+   finished panel with its own purple ground, its own margins and a four-line
+   lockup. Capped at the 108px logo height it renders that lockup at about 5px
+   and becomes unreadable, so this plate gives the panel the whole frame
+   instead of boxing it inside a white one. Same radius, same column, no white
+   ground and no padding to fight. */
+.plate--panel {
+  padding: 0;
+  background: none;
+  min-height: 0;
+  /* the panel is a square-cornered raster and the plate is rounded, so the
+     corners have to be clipped back to the plate's radius */
+  overflow: hidden;
+}
+.plate--panel img {
+  width: 100%;
+  height: auto;
+  max-height: none;
+}
 @media (prefers-reduced-motion: no-preference) {
   .plate:hover { transform: translateY(-3px); }
 }
@@ -816,11 +769,11 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 @media (max-width: 767px) {
   .partners__band { grid-template-columns: 1fr; }
-  .plate { min-height: 150px; }
+  .plate { min-height: 128px; }
 }
 
 /* --------------------------------------------------------------------------
-   14. Contact + footer. Layout family I: accent-tinted close.
+   12. Contact + footer. Layout family I: accent-tinted close.
    The one large-area accent moment below the fold. Still inside the dark
    family in dark mode and the light family in light mode, so the page theme
    never flips.
@@ -833,17 +786,34 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .contact__main {
   display: grid;
-  gap: clamp(1.25rem, 2.5vw, 2rem);
+  gap: clamp(1rem, 2vw, 1.5rem);
   justify-items: start;
   padding-bottom: var(--space-block);
 }
 
+/* The page's conversion point, and until now the site did not have one: this
+   section carried a city name and a copyright line and nothing actionable.
+   Accent in its action role, sized as the largest thing under the heading.
+   6.15:1 dark, 4.85:1 light, both AA. */
+.contact__mail {
+  font-size: clamp(1.25rem, 3.6vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  overflow-wrap: anywhere;
+  transition: border-color 0.27s var(--ease);
+}
+.contact__mail:hover { border-bottom-color: var(--accent); }
+
+/* demoted below the mail link, which is now the section's loudest element */
 .contact__where {
-  font-size: var(--fs-statement);
-  font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.022em;
-  color: var(--ink);
+  font-size: var(--fs-lead);
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--ink-muted);
 }
 
 .contact__foot {
@@ -871,10 +841,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 /* --------------------------------------------------------------------------
-   15. Motion. MOTION_INTENSITY 6.
+   13. Motion. MOTION_INTENSITY 7.
    Every duration is a whole multiple of the 90ms quantize step, so the page
-   moves on the same grid the looper records on. Four reveal roles instead of
-   one, transform and opacity only. Nothing here runs without JS, and nothing
+   moves on the same grid the looper records on. Three reveal roles, transform
+   and opacity only. The brand-watermark role went with the watermark. Nothing here runs without JS, and nothing
    here runs under prefers-reduced-motion.
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: no-preference) {
@@ -919,30 +889,39 @@ ul { margin: 0; padding: 0; list-style: none; }
     transition-duration: 720ms;
   }
 
-  /* the brand watermark: 10 steps, slowest thing on the page */
-  .js [data-reveal="mark"] {
-    transform: scale(0.94);
-    transition-property: opacity, transform;
-    transition-duration: 900ms;
-  }
-  .js [data-reveal="mark"].is-in { opacity: 0.13; }
+}
 
-  @media (max-width: 1023px) {
-    .js [data-reveal="mark"].is-in { opacity: 0.10; }
+/* Scroll-driven lift on the hero render. This is the motion the retired
+   photograph took with it, re-earned on the product instead: the device eases
+   back and up as the hero scrolls away, so the type block leads the exit.
+   Native CSS timeline, no scroll listener, no library. Three elements, three
+   jobs, so nothing contends for the same transform: the reveal transition runs
+   on .hero__figure, this runs on the <picture> inside it, and the drop-shadow
+   stays on the image below that. The wrapper is deliberately the animated one.
+   Driving this on the image itself re-rasterizes its drop-shadow every frame
+   and stalls the compositor; on an unfiltered wrapper the shadow is rasterized
+   once and the cached layer is simply moved. Silently absent where
+   unsupported. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__figure picture {
+      animation: hero-lift linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 90vh;
+      will-change: transform;
+    }
+    @keyframes hero-lift {
+      to { transform: translateY(-6%) scale(0.955); }
+    }
   }
 }
 
-/* Scroll-driven drift on the hero photograph. Native CSS timeline, no scroll
-   listener, no library. Silently absent where unsupported. */
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .hero__media img {
-      animation: hero-drift linear both;
-      animation-timeline: scroll(root block);
-      animation-range: 0 90vh;
-    }
-    @keyframes hero-drift {
-      to { transform: translateY(5%) scale(1.07); }
-    }
-  }
+/* Two hover affordances predate this pass and animated a transform without a
+   reduced-motion guard: the nav underline wipe and the burger morph. Every
+   other transform on the page is already inside a no-preference block, so
+   these are dropped to instant here. The end states are untouched, the
+   underline still appears and the burger still becomes a cross. */
+@media (prefers-reduced-motion: reduce) {
+  .nav__link::after,
+  .nav__burger span { transition: none; }
 }

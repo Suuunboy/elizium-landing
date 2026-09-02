@@ -4,43 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>ЭЛИЗИУМ. Создаём музыкальные инновации</title>
-<meta name="description" content="Российское производство электронных музыкальных инструментов для профессионалов и любителей в г. Зеленоград.">
+<title>Аудио-лупер с квантизацией. Устройство контролируемого аудиоповтора</title>
+<meta name="description" content="Аудио-лупер с автоматической квантизацией: восемь петель, 16 часов записи, 48 кГц / 24 бит, обработка звука в реальном времени.">
 
-<link rel="canonical" href="https://elizium-music.tilda.ws/">
+<link rel="canonical" href="https://suuunboy.github.io/elizium-landing/">
 <meta name="theme-color" content="#0D0B08" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#F1F1EF" media="(prefers-color-scheme: light)">
 
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://elizium-music.tilda.ws/">
-<meta property="og:title" content="ЭЛИЗИУМ. Создаём музыкальные инновации">
-<meta property="og:description" content="Российское производство электронных музыкальных инструментов для профессионалов и любителей в г. Зеленоград.">
-<meta property="og:image" content="https://elizium-music.tilda.ws/assets/img/hero.jpg">
+<meta property="og:url" content="https://suuunboy.github.io/elizium-landing/">
+<meta property="og:title" content="Аудио-лупер с квантизацией">
+<meta property="og:description" content="Восемь петель, 16 часов записи, 48 кГц / 24 бит, обработка звука в реальном времени.">
+<meta property="og:image" content="https://suuunboy.github.io/elizium-landing/assets/img/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta property="og:locale" content="ru_RU">
 
 <link rel="icon" href="assets/img/logo.png" type="image/png">
 <link rel="apple-touch-icon" href="assets/img/logo.png">
 
 <link rel="preload" href="assets/fonts/TildaSans-VF.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/img/hero.webp" as="image" type="image/webp" fetchpriority="high">
+<link rel="preload" href="assets/img/device.webp" as="image" type="image/webp" fetchpriority="high">
 <link rel="stylesheet" href="assets/css/styles.css">
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "ООО \"ЭЛИЗИУМ\"",
-  "alternateName": "ЭЛИЗИУМ",
-  "url": "https://elizium-music.tilda.ws/",
-  "logo": "https://elizium-music.tilda.ws/assets/img/logo.png",
-  "description": "Российское производство электронных музыкальных инструментов для профессионалов и любителей в г. Зеленоград.",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Зеленоград",
-    "addressCountry": "RU"
-  }
-}
-</script>
 
 <script type="application/ld+json">
 {
@@ -49,8 +34,8 @@
   "name": "Устройство контролируемого аудиоповтора",
   "alternateName": "Аудио-лупер с эффектом квантизации",
   "category": "Электронные музыкальные инструменты",
-  "url": "https://elizium-music.tilda.ws/#products",
-  "image": "https://elizium-music.tilda.ws/assets/img/device.png",
+  "url": "https://suuunboy.github.io/elizium-landing/",
+  "image": "https://suuunboy.github.io/elizium-landing/assets/img/og.png",
   "description": "Устройство непрерывного воспроизведения с контролируемым периодом повторения, многоканальной цифровой записью и обработкой в реальном времени. Разрабатывается на микроконтроллерной платформе.",
   "brand": { "@type": "Brand", "name": "ЭЛИЗИУМ" },
   "manufacturer": { "@type": "Organization", "name": "ООО \"ЭЛИЗИУМ\"" },
@@ -71,8 +56,8 @@
   <div class="nav__inner">
 
     <ul class="nav__group nav__group--start">
-      <li><a class="nav__link" href="#rec2004730931">О компании</a></li>
       <li><a class="nav__link" href="#products">О продуктах</a></li>
+      <li><a class="nav__link" href="#rec2004761681">Партнёры</a></li>
     </ul>
 
     <a class="nav__brand" href="#top" aria-label="ЭЛИЗИУМ, наверх страницы">
@@ -80,7 +65,6 @@
     </a>
 
     <ul class="nav__group nav__group--end">
-      <li><a class="nav__link" href="#rec2004761681">Партнёры</a></li>
       <li><a class="nav__link" href="#rec2004731031">Контакты</a></li>
     </ul>
 
@@ -90,7 +74,6 @@
   </div>
 
   <nav class="nav__mobile" id="nav-mobile" aria-label="Основное меню" hidden>
-    <a class="nav__mobile-link" href="#rec2004730931">О компании</a>
     <a class="nav__mobile-link" href="#products">О продуктах</a>
     <a class="nav__mobile-link" href="#rec2004761681">Партнёры</a>
     <a class="nav__mobile-link" href="#rec2004731031">Контакты</a>
@@ -101,70 +84,42 @@
 
 <main id="main">
 
-  <!-- Layout family A: asymmetric split hero. Type block left, brand mark right,
-       photograph demoted from subject to a treated texture layer behind both. -->
+  <!-- Layout family A: asymmetric split hero. Type block left, the device
+       itself on the right. The device is the subject of the page, so it is the
+       subject of the hero: no photograph, no brand watermark. -->
   <section class="hero">
     <div class="hero__card">
-      <picture class="hero__media">
-        <source srcset="assets/img/hero.webp" type="image/webp">
-        <img src="assets/img/hero.jpg"
-             alt="Модульный синтезатор: панели с ручками и коммутационными разъёмами"
-             width="1680" height="1119" fetchpriority="high" decoding="async">
-      </picture>
-      <div class="hero__veil" aria-hidden="true"></div>
       <div class="hero__field" aria-hidden="true"></div>
 
-      <img class="hero__mark" src="assets/img/logo.png" alt="" aria-hidden="true"
-           width="512" height="512" decoding="async" data-reveal="mark" style="--i:1">
-
       <div class="hero__content">
-        <h1 class="hero__title" data-reveal="rise" style="--i:0">ЭЛИЗИУМ</h1>
-        <p class="hero__lead" data-reveal="rise" style="--i:1">Российское производство электронных музыкальных инструментов для профессионалов и любителей в г. Зеленоград</p>
+        <h1 class="hero__title" data-reveal="rise" style="--i:0">Аудио-лупер с квантизацией</h1>
+        <p class="hero__lead" data-reveal="rise" style="--i:1">Восемь петель, обработка в реальном времени и автоматическое выравнивание ритма без ручной подстройки.</p>
+        <a class="hero__cta" href="#products" data-reveal="rise" style="--i:2">Смотреть характеристики</a>
       </div>
-    </div>
-  </section>
 
-  <!-- Layout family B: typographic asymmetric grid, no image -->
-  <section class="about" id="rec2004730931" aria-labelledby="about-title">
-    <div class="wrap about__grid">
-      <div class="about__head" data-reveal="rise" style="--i:0">
-        <h2 class="h2" id="about-title">О компании</h2>
-        <p class="about__sub">Инновации в мире электронных музыкальных инструментов</p>
-      </div>
-      <div class="about__body" data-reveal="rise" style="--i:1">
-        <p class="lead">Мы специализируемся на разработке и продаже электронных музыкальных инструментов в России. Наша команда состоит из инициативных инженеров и музыкантов, объединённых страстью к музыке и технологиям.</p>
-      </div>
+      <figure class="hero__figure" data-reveal="media" style="--i:1">
+        <picture>
+          <source srcset="assets/img/device.webp" type="image/webp">
+          <img src="assets/img/device.png"
+               alt="Аудио-лупер: корпус с кнопкой записи, двумя регуляторами, экраном и матрицей клавиш."
+               width="1100" height="1400" fetchpriority="high" decoding="async">
+        </picture>
+      </figure>
     </div>
   </section>
 
   <section class="product" id="products" aria-labelledby="product-title">
 
-    <div class="wrap">
-      <header class="product__head">
-        <h2 class="h2" id="product-title" data-reveal="rise" style="--i:0">О продуктах</h2>
-        <p class="product__sub" data-reveal="rise" style="--i:1">Всё о наших музыкальных разработках</p>
-      </header>
-    </div>
-
-    <!-- Layout family D: media panel plus offset text -->
-    <div class="wrap">
-      <div class="device">
-        <figure class="device__figure" data-reveal="media" style="--i:0">
-          <picture>
-            <source srcset="assets/img/device.webp" type="image/webp">
-            <img src="assets/img/device.png"
-                 alt="Аудио-лупер ЭЛИЗИУМ: корпус с кнопкой записи, двумя регуляторами, экраном и матрицей клавиш."
-                 width="1100" height="1400" loading="lazy" decoding="async">
-          </picture>
-          <figcaption class="device__caption">Внешний вид устройства. Разработка продолжается.</figcaption>
-        </figure>
-
-        <div class="device__text" data-reveal="rise" style="--i:1">
-          <h3 class="h3">Устройство контролируемого аудиоповтора</h3>
-          <p class="device__kicker">Аудио-лупер с эффектом квантизации</p>
-          <p>Компактный корпус с экраном, клавишами регулировки и несколькими аудиовходами. Устройство записывает аудиосигналы для дальнейшего зацикливания и обработки.</p>
-          <p>Разрабатывается на микроконтроллерной платформе с применением принципов цифровой обработки сигналов. Программный код реализуется на системном языке программирования.</p>
-        </div>
+    <!-- Layout family B: typographic asymmetric grid, no image. Header stacks
+         vertically (no split-header), body indents on a later row. -->
+    <div class="wrap product__grid">
+      <div class="product__head" data-reveal="rise" style="--i:0">
+        <h2 class="h2" id="product-title">Устройство контролируемого аудиоповтора</h2>
+        <p class="product__sub">Аудио-лупер с эффектом квантизации</p>
+      </div>
+      <div class="product__body" data-reveal="rise" style="--i:1">
+        <p class="lead">Компактный корпус с экраном, клавишами регулировки и несколькими аудиовходами. Устройство записывает аудиосигналы для дальнейшего зацикливания и обработки.</p>
+        <p>Разрабатывается на микроконтроллерной платформе с применением принципов цифровой обработки сигналов. Программный код реализуется на системном языке программирования.</p>
       </div>
     </div>
 
@@ -231,21 +186,30 @@
 
   </section>
 
-  <!-- Layout family H: credential band, the partner mark beside the support statement -->
+  <!-- Layout family H: credential band, both partner marks beside the support
+       statement. Two plates, identical treatment, logos only. -->
   <section class="partners" id="rec2004761681" aria-labelledby="partners-title">
     <div class="wrap">
       <h2 class="h2 partners__title" id="partners-title" data-reveal="rise" style="--i:0">Партнёры</h2>
 
       <div class="partners__band">
-        <div class="plate" data-reveal="tile" style="--i:1">
-          <picture>
-            <source srcset="assets/img/fasie.webp" type="image/webp">
-            <img src="assets/img/fasie.png" alt="Фонд содействия инновациям"
-                 width="800" height="449" loading="lazy" decoding="async">
-          </picture>
+        <div class="partners__plates">
+          <div class="plate" data-reveal="tile" style="--i:1">
+            <picture>
+              <source srcset="assets/img/fasie.webp" type="image/webp">
+              <img src="assets/img/fasie.png" alt="Фонд содействия инновациям"
+                   width="800" height="449" loading="lazy" decoding="async">
+            </picture>
+          </div>
+
+          <div class="plate plate--panel" data-reveal="tile" style="--i:2">
+            <img src="assets/img/platforma.png"
+                 alt="Платформа университетского технологического предпринимательства"
+                 width="1200" height="630" loading="lazy" decoding="async">
+          </div>
         </div>
 
-        <div class="partners__body" data-reveal="rise" style="--i:2">
+        <div class="partners__body" data-reveal="rise" style="--i:3">
           <p class="partners__support">Проект реализован при поддержке Фонда содействия инновациям в рамках программы «Студенческий стартап» мероприятия «Платформа университетского технологического предпринимательства» федерального проекта «Технологии».</p>
           <p class="partners__legal">ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ УЧРЕЖДЕНИЕ "ФОНД СОДЕЙСТВИЯ РАЗВИТИЮ МАЛЫХ ФОРМ ПРЕДПРИЯТИЙ В НАУЧНО-ТЕХНИЧЕСКОЙ СФЕРЕ"</p>
         </div>
@@ -260,7 +224,8 @@
   <div class="wrap">
     <div class="contact__main">
       <h2 class="h2" id="contact-title" data-reveal="rise" style="--i:0">Контакты</h2>
-      <p class="contact__where" data-reveal="rise" style="--i:1">Зеленоград, Россия</p>
+      <a class="contact__mail" href="mailto:elizium.synth@yandex.ru" data-reveal="rise" style="--i:1">elizium.synth@yandex.ru</a>
+      <p class="contact__where" data-reveal="rise" style="--i:2">Зеленоград, Россия</p>
     </div>
 
     <div class="contact__foot">

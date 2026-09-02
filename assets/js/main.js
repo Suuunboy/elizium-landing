@@ -21,14 +21,12 @@
        webviews) a transition can park an element on its start frame and leave
        it at opacity 0 for good. This watchdog checks each element after its own
        delay has elapsed and drops the transition if it never ran, which lets
-       the CSS end state apply at once.
-       The brand watermark settles at 0.13, not 1, so it gets its own floor
-       rather than being forced opaque. */
+       the CSS end state apply at once. Every reveal role now ends fully opaque,
+       so one floor covers all of them. */
     var settle = function (el) {
       var i = parseInt(el.style.getPropertyValue('--i'), 10) || 0;
-      var floor = el.getAttribute('data-reveal') === 'mark' ? 0.05 : 0.99;
       window.setTimeout(function () {
-        if (parseFloat(window.getComputedStyle(el).opacity) < floor) {
+        if (parseFloat(window.getComputedStyle(el).opacity) < 0.99) {
           el.classList.add('is-settled');
         }
       }, 1000 + i * 90);
