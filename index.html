@@ -33,13 +33,33 @@
   "alternateName": "ЭЛИЗИУМ",
   "url": "https://elizium-music.tilda.ws/",
   "logo": "https://elizium-music.tilda.ws/assets/img/logo.png",
-  "email": "zakhlun@yandex.ru",
   "description": "Российское производство электронных музыкальных инструментов для профессионалов и любителей в г. Зеленоград.",
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Зеленоград",
     "addressCountry": "RU"
   }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Устройство контролируемого аудиоповтора",
+  "alternateName": "Аудио-лупер с эффектом квантизации",
+  "category": "Электронные музыкальные инструменты",
+  "url": "https://elizium-music.tilda.ws/#products",
+  "image": "https://elizium-music.tilda.ws/assets/img/device.png",
+  "description": "Устройство непрерывного воспроизведения с контролируемым периодом повторения, многоканальной цифровой записью и обработкой в реальном времени. Разрабатывается на микроконтроллерной платформе.",
+  "brand": { "@type": "Brand", "name": "ЭЛИЗИУМ" },
+  "manufacturer": { "@type": "Organization", "name": "ООО \"ЭЛИЗИУМ\"" },
+  "additionalProperty": [
+    { "@type": "PropertyValue", "name": "Количество аудио-петель", "value": "8" },
+    { "@type": "PropertyValue", "name": "Общее время записи", "value": "16 часов" },
+    { "@type": "PropertyValue", "name": "Максимальная длина петли", "value": "10 минут" },
+    { "@type": "PropertyValue", "name": "Качество звука", "value": "48 кГц / 24 бит" }
+  ]
 }
 </script>
 </head>
@@ -52,7 +72,7 @@
 
     <ul class="nav__group nav__group--start">
       <li><a class="nav__link" href="#rec2004730931">О компании</a></li>
-      <li><a class="nav__link" href="#rec2061990031">О продуктах</a></li>
+      <li><a class="nav__link" href="#products">О продуктах</a></li>
     </ul>
 
     <a class="nav__brand" href="#top" aria-label="ЭЛИЗИУМ, наверх страницы">
@@ -71,7 +91,7 @@
 
   <nav class="nav__mobile" id="nav-mobile" aria-label="Основное меню" hidden>
     <a class="nav__mobile-link" href="#rec2004730931">О компании</a>
-    <a class="nav__mobile-link" href="#rec2061990031">О продуктах</a>
+    <a class="nav__mobile-link" href="#products">О продуктах</a>
     <a class="nav__mobile-link" href="#rec2004761681">Партнёры</a>
     <a class="nav__mobile-link" href="#rec2004731031">Контакты</a>
   </nav>
@@ -81,7 +101,8 @@
 
 <main id="main">
 
-  <!-- Layout family 1: overlay cover, content anchored bottom-left, large empty zone right -->
+  <!-- Layout family A: asymmetric split hero. Type block left, brand mark right,
+       photograph demoted from subject to a treated texture layer behind both. -->
   <section class="hero">
     <div class="hero__card">
       <picture class="hero__media">
@@ -90,73 +111,142 @@
              alt="Модульный синтезатор: панели с ручками и коммутационными разъёмами"
              width="1680" height="1119" fetchpriority="high" decoding="async">
       </picture>
-      <div class="hero__tint" aria-hidden="true"></div>
+      <div class="hero__veil" aria-hidden="true"></div>
+      <div class="hero__field" aria-hidden="true"></div>
+
+      <img class="hero__mark" src="assets/img/logo.png" alt="" aria-hidden="true"
+           width="512" height="512" decoding="async" data-reveal="mark" style="--i:1">
 
       <div class="hero__content">
-        <h1 class="hero__title" data-reveal style="--i:0">ЭЛИЗИУМ</h1>
-        <p class="hero__lead" data-reveal style="--i:1">Российское производство электронных музыкальных инструментов для профессионалов и любителей в г. Зеленоград</p>
-        <div class="hero__actions" data-reveal style="--i:2">
-          <a class="btn" href="mailto:zakhlun@yandex.ru">Написать нам</a>
-        </div>
+        <h1 class="hero__title" data-reveal="rise" style="--i:0">ЭЛИЗИУМ</h1>
+        <p class="hero__lead" data-reveal="rise" style="--i:1">Российское производство электронных музыкальных инструментов для профессионалов и любителей в г. Зеленоград</p>
       </div>
     </div>
   </section>
 
-  <!-- Layout family 2: typographic asymmetric grid, no image -->
+  <!-- Layout family B: typographic asymmetric grid, no image -->
   <section class="about" id="rec2004730931" aria-labelledby="about-title">
     <div class="wrap about__grid">
-      <div class="about__head" data-reveal style="--i:0">
+      <div class="about__head" data-reveal="rise" style="--i:0">
         <h2 class="h2" id="about-title">О компании</h2>
         <p class="about__sub">Инновации в мире электронных музыкальных инструментов</p>
       </div>
-      <div class="about__body" data-reveal style="--i:1">
+      <div class="about__body" data-reveal="rise" style="--i:1">
         <p class="lead">Мы специализируемся на разработке и продаже электронных музыкальных инструментов в России. Наша команда состоит из инициативных инженеров и музыкантов, объединённых страстью к музыке и технологиям.</p>
       </div>
     </div>
   </section>
 
-  <!-- Layout family 3: split asset + text, asset breaks the grid, mono numerals inline -->
-  <section class="product" id="rec2061990031" aria-labelledby="product-title">
-    <div class="wrap">
-      <header class="product__head" data-reveal style="--i:0">
-        <h2 class="h2" id="product-title">Наша продукция</h2>
-        <p class="product__sub">Всё о наших музыкальных разработках</p>
-      </header>
+  <section class="product" id="products" aria-labelledby="product-title">
 
-      <div class="product__grid">
-        <figure class="product__figure" data-reveal style="--i:1">
+    <div class="wrap">
+      <header class="product__head">
+        <h2 class="h2" id="product-title" data-reveal="rise" style="--i:0">О продуктах</h2>
+        <p class="product__sub" data-reveal="rise" style="--i:1">Всё о наших музыкальных разработках</p>
+      </header>
+    </div>
+
+    <!-- Layout family D: media panel plus offset text -->
+    <div class="wrap">
+      <div class="device">
+        <figure class="device__figure" data-reveal="media" style="--i:0">
           <picture>
-            <source srcset="assets/img/looper.webp" type="image/webp">
-            <img src="assets/img/looper.jpg"
-                 alt="Эскиз панели аудио-лупера ЭЛИЗИУМ с органами управления REC/PLAY, QUANTIZE, TAP TEMPO и SELECT TRACK. Эскиз в разработке."
-                 width="1660" height="1031" loading="lazy" decoding="async">
+            <source srcset="assets/img/device.webp" type="image/webp">
+            <img src="assets/img/device.png"
+                 alt="Аудио-лупер ЭЛИЗИУМ: корпус с кнопкой записи, двумя регуляторами, экраном и матрицей клавиш."
+                 width="1100" height="1400" loading="lazy" decoding="async">
           </picture>
+          <figcaption class="device__caption">Внешний вид устройства. Разработка продолжается.</figcaption>
         </figure>
 
-        <div class="product__text" data-reveal style="--i:2">
-          <h3 class="h3">Устройство контролируемого аудиоповтора. Аудио-лупер с эффектом квантизации</h3>
-          <p>С помощью устройства возможно осуществлять запись аудиосигналов с целью их дальнейшего зацикливания и обработки. Устройство непрерывного воспроизведения будет разработано на базе микроконтроллерной платформы с применением принципов цифровой обработки сигналов и реализовано на системном языке программирования.</p>
-          <p>Устройство будет использовать до <b class="num">8</b> аудио-петель, иметь функцию автодетекции, а также общее время записи во все ячейки памяти до <b class="num">16</b> часов.</p>
+        <div class="device__text" data-reveal="rise" style="--i:1">
+          <h3 class="h3">Устройство контролируемого аудиоповтора</h3>
+          <p class="device__kicker">Аудио-лупер с эффектом квантизации</p>
+          <p>Компактный корпус с экраном, клавишами регулировки и несколькими аудиовходами. Устройство записывает аудиосигналы для дальнейшего зацикливания и обработки.</p>
+          <p>Разрабатывается на микроконтроллерной платформе с применением принципов цифровой обработки сигналов. Программный код реализуется на системном языке программирования.</p>
         </div>
       </div>
     </div>
+
+    <!-- Layout family E: four-cell numeric data grid, mono display numerals -->
+    <div class="wrap">
+      <ul class="specs" aria-label="Характеристики устройства">
+        <li class="specs__cell" data-reveal="tile" style="--i:0">
+          <p class="specs__value"><span class="num">8</span></p>
+          <p class="specs__label">аудио-петель одновременно</p>
+        </li>
+        <li class="specs__cell" data-reveal="tile" style="--i:1">
+          <p class="specs__value"><span class="num">16</span><span class="specs__unit">ч</span></p>
+          <p class="specs__label">общее время записи</p>
+        </li>
+        <li class="specs__cell" data-reveal="tile" style="--i:2">
+          <p class="specs__value"><span class="num">10</span><span class="specs__unit">мин</span></p>
+          <p class="specs__label">максимум на одну петлю</p>
+        </li>
+        <li class="specs__cell" data-reveal="tile" style="--i:3">
+          <p class="specs__value"><span class="num">48</span><span class="specs__unit">кГц</span></p>
+          <p class="specs__label">24 бит, студийное качество</p>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Layout family F: asymmetric 1 + 2 capability grid, backgrounds vary per cell -->
+    <div class="wrap">
+      <div class="caps">
+        <article class="caps__cell caps__cell--lead" data-reveal="tile" style="--i:0">
+          <h3 class="caps__title">Квантизация</h3>
+          <p>Ритмические ошибки исполнителя корректируются автоматически в реальном времени. Запись подтягивается к заданной сетке.</p>
+        </article>
+        <article class="caps__cell caps__cell--tint" data-reveal="tile" style="--i:1">
+          <h3 class="caps__title">Автодетекция периода</h3>
+          <p>Длительность петли определяется автоматически, без ручной подстройки при записи.</p>
+        </article>
+        <article class="caps__cell" data-reveal="tile" style="--i:2">
+          <h3 class="caps__title">Обработка в реальном времени</h3>
+          <p>Регулировка скорости, изменение высоты тона, микширование и модуляция.</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- Layout family G: full-bleed band, three uses divided by vertical rules -->
+    <div class="uses">
+      <div class="wrap">
+        <div class="uses__row">
+          <div class="uses__item" data-reveal="rise" style="--i:0">
+            <h3 class="uses__title">Живые выступления</h3>
+            <p>Многослойные звуковые дорожки прямо на сцене.</p>
+          </div>
+          <div class="uses__item" data-reveal="rise" style="--i:1">
+            <h3 class="uses__title">Студийная запись</h3>
+            <p>Автоматическая синхронизация петель при записи.</p>
+          </div>
+          <div class="uses__item" data-reveal="rise" style="--i:2">
+            <h3 class="uses__title">Обучение</h3>
+            <p>Повторение и наслоение фрагментов при разборе материала.</p>
+          </div>
+        </div>
+        <p class="uses__audience" data-reveal="rise" style="--i:3">Среди потребителей: звуковые инженеры и режиссёры, саунд-дизайнеры, музыкальные артисты и творческие объединения.</p>
+      </div>
+    </div>
+
   </section>
 
-  <!-- Layout family 4: horizontal credential band, logo on its own light plate -->
+  <!-- Layout family H: credential band, the partner mark beside the support statement -->
   <section class="partners" id="rec2004761681" aria-labelledby="partners-title">
     <div class="wrap">
-      <h2 class="h2 partners__title" id="partners-title" data-reveal style="--i:0">Партнеры</h2>
+      <h2 class="h2 partners__title" id="partners-title" data-reveal="rise" style="--i:0">Партнёры</h2>
 
-      <div class="partners__band" data-reveal style="--i:1">
-        <div class="partners__plate">
+      <div class="partners__band">
+        <div class="plate" data-reveal="tile" style="--i:1">
           <picture>
             <source srcset="assets/img/fasie.webp" type="image/webp">
             <img src="assets/img/fasie.png" alt="Фонд содействия инновациям"
                  width="800" height="449" loading="lazy" decoding="async">
           </picture>
         </div>
-        <div class="partners__text">
-          <p class="partners__name">ФОНД СОДЕЙСТВИЯ ИННОВАЦИЯМ</p>
+
+        <div class="partners__body" data-reveal="rise" style="--i:2">
+          <p class="partners__support">Проект реализован при поддержке Фонда содействия инновациям в рамках программы «Студенческий стартап» мероприятия «Платформа университетского технологического предпринимательства» федерального проекта «Технологии».</p>
           <p class="partners__legal">ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ УЧРЕЖДЕНИЕ "ФОНД СОДЕЙСТВИЯ РАЗВИТИЮ МАЛЫХ ФОРМ ПРЕДПРИЯТИЙ В НАУЧНО-ТЕХНИЧЕСКОЙ СФЕРЕ"</p>
         </div>
       </div>
@@ -165,15 +255,12 @@
 
 </main>
 
-<!-- Layout family 5: contact block + footer row -->
+<!-- Layout family I: accent-tinted close, oversized mail link -->
 <footer class="contact" id="rec2004731031" aria-labelledby="contact-title">
   <div class="wrap">
-    <div class="contact__main" data-reveal style="--i:0">
-      <h2 class="h2" id="contact-title">Контакты</h2>
-      <a class="contact__mail" href="mailto:zakhlun@yandex.ru">zakhlun@yandex.ru</a>
-      <div class="contact__actions">
-        <a class="btn" href="mailto:zakhlun@yandex.ru">Написать нам</a>
-      </div>
+    <div class="contact__main">
+      <h2 class="h2" id="contact-title" data-reveal="rise" style="--i:0">Контакты</h2>
+      <p class="contact__where" data-reveal="rise" style="--i:1">Зеленоград, Россия</p>
     </div>
 
     <div class="contact__foot">

@@ -20,38 +20,52 @@
        animation clock is stalled (a throttled background tab, some embedded
        webviews) a transition can park an element on its start frame and leave
        it at opacity 0 for good. This watchdog checks each element after its own
-       delay has elapsed and pins the end state if the transition never ran. */
+       delay has elapsed and drops the transition if it never ran, which lets
+       the CSS end state apply at once.
+       The brand watermark settles at 0.13, not 1, so it gets its own floor
+       rather than being forced opaque. */
     var settle = function (el) {
       var i = parseInt(el.style.getPropertyValue('--i'), 10) || 0;
+      var floor = el.getAttribute('data-reveal') === 'mark' ? 0.05 : 0.99;
       window.setTimeout(function () {
-        if (parseFloat(window.getComputedStyle(el).opacity) < 0.99) {
-          el.style.opacity = '1';
-          el.style.transform = 'none';
+        if (parseFloat(window.getComputedStyle(el).opacity) < floor) {
+          el.classList.add('is-settled');
         }
       }, 1000 + i * 90);
     };
 
-    var reveal = function (el) {
-      el.classList.add('is-in');
-      settle(el);
-    };
-
-    var revealObserver = new IntersectionObserver(function (entries, observer) {
+    var revealObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        reveal(entry.target);
-        observer.unobserve(entry.target);
+        if (entry.isIntersecting) reveal(entry.target);
       });
     }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
 
+    var reveal = function (el) {
+      if (el.classList.contains('is-in')) return;
+      el.classList.add('is-in');
+      revealObserver.unobserve(el);
+      settle(el);
+    };
+
     targets.forEach(function (el) { revealObserver.observe(el); });
 
-    /* Above-the-fold content should not wait for a scroll event to appear. */
-    requestAnimationFrame(function () {
-      document.querySelectorAll('.hero [data-reveal]').forEach(function (el) {
-        reveal(el);
-        revealObserver.unobserve(el);
+    /* Second half of the same guarantee. An observer callback can be coalesced
+       or dropped when the tab is throttled, and a hash deep-link or an in-page
+       anchor can land the reader past a region without one ever firing. So
+       sweep whatever is already on screen: on the first frame, once shortly
+       after load, and every time the document becomes visible again. Anything
+       still below the fold is left to the observer, so the reveal is never
+       spent before the reader gets there. */
+    var sweep = function () {
+      targets.forEach(function (el) {
+        if (el.getBoundingClientRect().top < window.innerHeight) reveal(el);
       });
+    };
+
+    requestAnimationFrame(sweep);
+    window.setTimeout(sweep, 2500);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) sweep();
     });
   }
 

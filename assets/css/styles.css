@@ -3,13 +3,18 @@
    Aesthetic family: dark tech / instrument panel. This is an aesthetic, not an
    official design system (no Material, Fluent, Carbon or Polaris here). Built
    with native CSS custom properties.
-   Dials: DESIGN_VARIANCE 6, MOTION_INTENSITY 5, VISUAL_DENSITY 4.
+
+   Redesign mode: Overhaul. Visual language rebuilt, brand token layer
+   preserved (accent hue, type stack, logo, 20/10 radius family).
+   Dials: DESIGN_VARIANCE 7, MOTION_INTENSITY 6, VISUAL_DENSITY 4.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
    1. Fonts. Self-hosted, font-display: swap.
    TildaSans is the preserved brand type stack (variable, full Cyrillic).
    JetBrains Mono (OFL-1.1, latin subset) carries technical numerals only.
+   The variable axis runs 250 to 1000 and the redesign actually uses it: 300
+   for prose, 600 for section heads, 700 for titles, 800 for the display.
    -------------------------------------------------------------------------- */
 @font-face {
   font-family: 'TildaSans';
@@ -29,8 +34,10 @@
 
 /* --------------------------------------------------------------------------
    2. Tokens.
-   Ground is derived from the brand's own hero tint rgb(51,36,0): a warm
-   near-black rather than the pure #000 the old site used.
+   Ground is the preserved brand near-black, derived from the old hero tint
+   rgb(51,36,0). The neutral ramp around it is roughly three times wider than
+   the previous build, which is what lets sections read as separate planes
+   instead of one flat column.
    Accent holds the existing brand hue (13deg) from #FF8562, desaturated from
    100% to 76% to satisfy the max-saturation rule, then re-tuned per mode so
    contrast passes AA in both. One accent, one hue, whole page.
@@ -39,9 +46,11 @@
   color-scheme: dark light;
 
   /* dark is the brand default */
-  --ground:      #0D0B08;
-  --surface:     #16130D;
-  --surface-2:   #211C14;
+  --deep:        #070604;   /* below ground: the full-bleed band */
+  --ground:      #0D0B08;   /* preserved, matches the theme-color meta */
+  --surface:     #17130C;
+  --surface-2:   #221D14;
+  --stage:       #2C2519;   /* lighter plane the product render sits on */
   --plate:       #F4F3F0;   /* light plate for dark-only partner logos */
   --line:        rgba(239, 237, 232, 0.13);
   --line-strong: rgba(239, 237, 232, 0.26);
@@ -51,44 +60,66 @@
   --accent:      #E87454;
   --accent-ink:  #12100C;
   --accent-soft: rgba(232, 116, 84, 0.14);
+  --accent-glow: rgba(232, 116, 84, 0.20);
+  --plane-accent: #1E120D;  /* accent-tinted close, still inside the dark family */
+  --shade:       rgba(0, 0, 0, 0.45);
+  --hero-treat:  grayscale(0.55) brightness(0.44) contrast(1.14);
 
   /* one radius rule: surfaces 20px (brand token), controls 10px */
   --r-surface: 20px;
   --r-control: 10px;
 
-  /* type scale, governed */
-  --fs-display: clamp(2.75rem, 8.5vw, 6rem);
-  --fs-h2:      clamp(1.875rem, 4.2vw, 3.125rem);
-  --fs-h3:      clamp(1.15rem, 1.9vw, 1.5rem);
-  --fs-lead:    clamp(1.0625rem, 1.5vw, 1.3125rem);
-  --fs-body:    1.0625rem;
-  --fs-sm:      0.9375rem;
-  --fs-xs:      0.8125rem;
+  /* type scale: five distinct steps plus display, so the page does not
+     collapse to one loud moment followed by flat body text */
+  --fs-display:   clamp(2.75rem, 7.4vw, 6.5rem);
+  --fs-h2:        clamp(2rem, 4.6vw, 3.5rem);
+  --fs-statement: clamp(1.375rem, 2.9vw, 2.25rem);
+  --fs-h3:        clamp(1.3125rem, 2.2vw, 1.75rem);
+  --fs-num:       clamp(2.5rem, 5.4vw, 4rem);
+  --fs-lead:      clamp(1.0625rem, 1.5vw, 1.3125rem);
+  --fs-body:      1.0625rem;
+  --fs-sm:        0.9375rem;
+  --fs-xs:        0.8125rem;
 
-  /* rhythm, VISUAL_DENSITY 4 band */
-  --space-section: clamp(4rem, 8vw, 6.5rem);
+  /* spacing scale, VISUAL_DENSITY 4 band */
+  --s-2: 0.75rem;
+  --s-3: 1rem;
+  --s-4: 1.5rem;
+  --s-5: 2rem;
+  --space-section: clamp(4.5rem, 8.5vw, 7rem);
+  --space-block:   clamp(2.5rem, 5vw, 4rem);
   --gutter:        clamp(1.25rem, 4vw, 3rem);
   --maxw:          1400px;
   --nav-h:         72px;
 
+  /* faceplate texture: hairline grid, the one decorative material on the page */
+  --grid-fine:
+    repeating-linear-gradient(0deg, transparent 0 27px, var(--line) 27px 28px),
+    repeating-linear-gradient(90deg, transparent 0 27px, var(--line) 27px 28px);
+
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --step: 90ms;            /* quantized reveal grid */
+  --step: 90ms;            /* quantized reveal grid, echoing the looper */
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    --ground:      #F1F1EF;
-    --surface:     #F8F8F6;
+    --deep:        #E4E3DE;
+    --ground:      #F1F1EF;   /* preserved, matches the theme-color meta */
+    --surface:     #FAFAF8;
     --surface-2:   #E9E9E5;
+    --stage:       #E6E5E0;
     --plate:       #FDFDFC;   /* off-white, never pure #fff */
     --line:        rgba(20, 18, 16, 0.14);
     --line-strong: rgba(20, 18, 16, 0.28);
     --ink:         #141210;
     --ink-muted:   #55514B;
-    --ink-faint:   #6B665F;
+    --ink-faint:   #635E57;   /* darkened so it clears AA on --deep too */
     --accent:      #A8482A;
     --accent-ink:  #FBF9F6;
     --accent-soft: rgba(168, 72, 42, 0.10);
+    --accent-glow: rgba(168, 72, 42, 0.14);
+    --plane-accent: #F3E9E4;
+    --shade:       rgba(20, 18, 16, 0.10);
   }
 }
 
@@ -114,7 +145,7 @@ body {
   font-weight: 300;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-wrap: break-word;   /* replaces the old word-break: break-all */
+  overflow-wrap: break-word;
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -122,7 +153,8 @@ picture { display: block; }
 
 a { color: inherit; }
 
-h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.015em; }
+/* Optical tracking scales with size instead of two fixed values. */
+h1, h2, h3 { margin: 0; font-weight: 700; letter-spacing: -0.02em; }
 
 p { margin: 0; }
 
@@ -137,25 +169,26 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .h2 {
   font-size: var(--fs-h2);
-  line-height: 1.08;
+  line-height: 1.02;
+  letter-spacing: -0.028em;
 }
 .h3 {
   font-size: var(--fs-h3);
-  line-height: 1.25;
+  line-height: 1.18;
+  letter-spacing: -0.018em;
 }
 .lead {
   font-size: var(--fs-lead);
   line-height: 1.55;
-  max-width: 62ch;
+  max-width: 60ch;
 }
 
 /* mono numerals, the only place the mono face appears */
 .num {
   font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-weight: 600;
-  font-size: 1.15em;
-  color: var(--accent);
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
 }
 
 :where(a, button, [tabindex]):focus-visible {
@@ -186,33 +219,6 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: block;
   height: 1px;
   margin-top: -1px;
-}
-
-/* --------------------------------------------------------------------------
-   4. Button. One CTA intent on this page ("Написать нам"), one label, one style.
-   -------------------------------------------------------------------------- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;              /* CTA never wraps */
-  padding: 0.875rem 1.75rem;
-  border-radius: var(--r-control);
-  background: var(--accent);
-  color: var(--accent-ink);
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  text-decoration: none;
-  border: 1px solid transparent;
-  transition: transform 0.25s var(--ease), background-color 0.25s var(--ease);
-}
-.btn:hover { background: color-mix(in srgb, var(--accent) 88%, var(--ink)); }
-.btn:active { transform: scale(0.98); }
-
-@media (prefers-reduced-motion: no-preference) {
-  .btn:hover { transform: translateY(-2px); }
-  .btn:active { transform: translateY(0) scale(0.98); }
 }
 
 /* --------------------------------------------------------------------------
@@ -276,7 +282,12 @@ ul { margin: 0; padding: 0; list-style: none; }
 .nav__link:hover::after { transform: scaleX(1); }
 
 .nav__brand { display: block; line-height: 0; }
-.nav__brand img { width: 44px; height: 44px; }
+.nav__brand img {
+  width: 44px;
+  height: 44px;
+  transition: opacity 0.25s var(--ease);
+}
+.nav__brand:hover img { opacity: 0.72; }
 
 .nav__burger {
   display: none;
@@ -328,9 +339,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 /* --------------------------------------------------------------------------
-   6. Hero. Layout family: overlay cover.
-   Content anchored bottom-left with a large empty zone to the right.
-   Preserves the brand's inset card and 20px radius.
+   6. Hero. Layout family A: asymmetric split.
+   Type block left, brand mark right, photograph demoted from subject to a
+   treated texture layer behind both. Preserves the brand's inset card and
+   20px radius.
    -------------------------------------------------------------------------- */
 .hero { padding: var(--gutter); }
 
@@ -339,10 +351,10 @@ ul { margin: 0; padding: 0; list-style: none; }
   isolation: isolate;
   overflow: hidden;
   border-radius: var(--r-surface);
-  min-height: min(calc(100dvh - var(--nav-h) - (var(--gutter) * 2)), 860px);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  min-height: min(calc(100dvh - var(--nav-h) - (var(--gutter) * 2)), 880px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  align-items: center;
   /* Fixed dark in BOTH modes. This is a photographic surface and the copy on it
      is always light, so the pre-load fallback must never resolve to a light
      token: that would render near-white text on a near-white card. */
@@ -352,65 +364,104 @@ ul { margin: 0; padding: 0; list-style: none; }
 .hero__media {
   position: absolute;
   inset: 0;
-  z-index: -2;
+  z-index: -3;
 }
 .hero__media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: 50% 45%;
+  /* The photograph is stock hardware from other manufacturers. Treated down to
+     a texture so it reads as material, not as a product claim. */
+  filter: var(--hero-treat);
 }
 
-/* preserved brand tint: the old rgba(51,36,0) warm-black wash, re-weighted
-   toward the bottom so the bottom-left copy clears AA */
-.hero__tint {
+/* preserved brand tint: the old rgba(51,36,0) warm-black wash, re-weighted to
+   pool behind the left-hand type block, plus a single accent glow */
+.hero__veil {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(120% 90% at 8% 62%, rgba(33, 24, 0, 0.42) 0%, rgba(10, 8, 5, 0.92) 58%),
+    linear-gradient(90deg, rgba(8, 6, 4, 0.94) 0%, rgba(8, 6, 4, 0.62) 46%, rgba(8, 6, 4, 0.80) 100%),
+    radial-gradient(70% 55% at 78% 22%, var(--accent-glow) 0%, transparent 62%);
+}
+
+/* faceplate hairline grid, the material cue that ties the page together */
+.hero__field {
   position: absolute;
   inset: 0;
   z-index: -1;
-  background:
-    linear-gradient(180deg,
-      rgba(33, 24, 0, 0.40) 0%,
-      rgba(12, 9, 5, 0.55) 42%,
-      rgba(8, 6, 4, 0.90) 100%);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 27px, rgba(239, 237, 232, 0.05) 27px 28px),
+    repeating-linear-gradient(90deg, transparent 0 27px, rgba(239, 237, 232, 0.05) 27px 28px);
+  mask-image: radial-gradient(80% 70% at 74% 45%, #000 0%, transparent 78%);
+}
+
+.hero__mark {
+  grid-column: 2;
+  justify-self: center;
+  align-self: center;
+  width: min(38vw, 340px);
+  height: auto;
+  opacity: 0.13;
+  pointer-events: none;
 }
 
 .hero__content {
-  padding: clamp(1.75rem, 5vw, 4rem);
-  padding-top: clamp(4rem, 10vw, 6rem);   /* well under the pt-24 cap */
-  max-width: 54rem;
+  grid-column: 1;
+  padding-inline: clamp(1.75rem, 4.5vw, 4.25rem);
+  padding-block: clamp(2.5rem, 6vw, 5.25rem);   /* under the 6rem desktop cap */
+  max-width: 44rem;
 }
 
 .hero__title {
   font-size: var(--fs-display);
-  line-height: 0.95;
-  letter-spacing: -0.03em;
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
   color: #F7F5F0;
-  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+  margin-bottom: clamp(1rem, 2vw, 1.75rem);
 }
 
 .hero__lead {
   font-size: var(--fs-lead);
   line-height: 1.5;
   color: #E4E0D8;
-  max-width: 44ch;
+  max-width: 34ch;
   margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
 }
-
-.hero__actions { display: flex; gap: 0.875rem; flex-wrap: wrap; }
 
 /* The hero card stays dark in both modes, so the brand's dark expression
    survives light mode. No border is needed: the dark card separates itself
    from the light ground on its own. */
 
+@media (max-width: 1023px) {
+  .hero__card { grid-template-columns: 1fr; }
+  .hero__mark {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: end;
+    align-self: start;
+    width: min(46vw, 260px);
+    margin: clamp(1.5rem, 5vw, 3rem);
+    opacity: 0.10;
+  }
+  .hero__content { grid-column: 1; grid-row: 1; max-width: none; }
+}
+
 @media (max-width: 767px) {
-  .hero__card { min-height: calc(100dvh - var(--nav-h) - (var(--gutter) * 2)); }
-  .hero__content { max-width: none; }
+  .hero__card {
+    min-height: calc(100dvh - var(--nav-h) - (var(--gutter) * 2));
+    align-items: end;
+  }
   .hero__lead { max-width: none; }
-  .hero__actions .btn { width: 100%; }
+  .hero__mark { width: 42vw; }
 }
 
 /* --------------------------------------------------------------------------
-   7. About. Layout family: typographic asymmetric grid, no image.
+   7. About. Layout family B: typographic asymmetric grid, no image.
    Header stacks vertically (no split-header), body indents on a later row.
    -------------------------------------------------------------------------- */
 .about { padding-block: var(--space-section); }
@@ -424,10 +475,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 .about__head { grid-column: 1 / 9; }
 
 /* Same slot as .product__sub, so same treatment. The accent is reserved for a
-   single role on this page: action and data (CTAs, the email link, the mono
-   figures, nav underline, focus ring). It is not a decorative text colour. */
+   single role on this page: action and data. It is not a decorative text
+   colour. */
 .about__sub {
-  margin-top: 0.875rem;
+  margin-top: var(--s-3);
   font-size: var(--fs-lead);
   font-weight: 400;
   color: var(--ink-muted);
@@ -446,135 +497,354 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 /* --------------------------------------------------------------------------
-   8. Product. Layout family: split asset + text with vertical offset.
-   The panel sketch is a light asset, so it sits on its own framed plate.
+   8. Product. Layout family C: stacked section head carrying the statement.
    -------------------------------------------------------------------------- */
 .product {
-  padding-block: var(--space-section);
+  padding-top: var(--space-section);
   border-top: 1px solid var(--line);
 }
 
-.product__head { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.product__head { margin-bottom: var(--space-block); max-width: 60rem; }
 
 .product__sub {
-  margin-top: 0.875rem;
+  margin-top: var(--s-3);
   font-size: var(--fs-lead);
   color: var(--ink-muted);
   max-width: 40ch;
 }
 
-.product__grid {
+/* --------------------------------------------------------------------------
+   9. Device. Layout family D: media panel plus offset text.
+   The panel sketch is a light asset, so it sits on its own framed plate.
+   -------------------------------------------------------------------------- */
+.device {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: clamp(1.75rem, 4vw, 3.5rem);
   align-items: start;
 }
 
-.product__figure {
-  grid-column: 1 / 8;
+/* The render is a cut-out on transparency and the device itself is near-black,
+   so it needs a lighter stage behind it or it disappears into the dark ground.
+   The warm glow doubles as separation and as the accent's presence here. */
+.device__figure {
+  grid-column: 1 / 6;
   margin: 0;
   border-radius: var(--r-surface);
   overflow: hidden;
   border: 1px solid var(--line);
-  background: var(--surface-2);
+  background-color: var(--stage);
+  background-image:
+    radial-gradient(58% 48% at 50% 38%, var(--accent-soft) 0%, transparent 72%),
+    var(--grid-fine);
+  box-shadow: 0 24px 60px -40px var(--shade);
 }
-.product__figure img { width: 100%; }
+.device__figure img {
+  width: 100%;
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.45));
+  transition: transform 0.63s var(--ease);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .device__figure:hover img { transform: scale(1.025); }
+}
 
-.product__text {
-  grid-column: 8 / 13;
+.device__caption {
+  padding: var(--s-3) var(--s-4);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-xs);
+  color: var(--ink-faint);
+  background: var(--surface);
+}
+
+.device__text {
+  grid-column: 6 / 13;
   margin-top: clamp(0rem, 3vw, 2.5rem);   /* the offset that breaks the symmetry */
   display: grid;
-  gap: 1.25rem;
+  gap: var(--s-4);
 }
-.product__text p {
+.device__text p {
   color: var(--ink-muted);
   max-width: 46ch;
 }
-.product__text .h3 { color: var(--ink); max-width: 22ch; }
+.device__text .h3 { color: var(--ink); max-width: 20ch; }
+
+.device__kicker {
+  margin-top: calc(var(--s-4) * -1 + var(--s-2));
+  font-size: var(--fs-lead);
+  font-weight: 600;
+  color: var(--accent);
+}
 
 @media (max-width: 1023px) {
-  .product__figure { grid-column: 1 / 13; }
-  .product__text { grid-column: 1 / 13; margin-top: 0; }
-  .product__text p, .product__text .h3 { max-width: 62ch; }
+  .device__figure { grid-column: 1 / 13; }
+  .device__text { grid-column: 1 / 13; margin-top: 0; }
+  .device__text p, .device__text .h3 { max-width: 62ch; }
 }
 
 /* --------------------------------------------------------------------------
-   9. Partners. Layout family: horizontal credential band.
-   The FASIE mark is black-on-white artwork and must not be recoloured, so it
-   keeps a light plate inside the dark page. This is a contained asset, not a
-   section theme flip.
+   10. Specs. Layout family E: four-cell numeric grid on one panel.
+   Hairline-divided cells rather than four card boxes. The first cell carries
+   the headline figure and gets the extra width.
+   -------------------------------------------------------------------------- */
+.specs {
+  margin-top: var(--space-block);
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r-surface);
+  overflow: hidden;
+}
+
+/* The cells carry the faceplate grid so this reads as one divided panel rather
+   than four flat text boxes, and the headline figure sits on its own tinted
+   plane. Background colour is kept separate from the image stack so the hover
+   can still transition. */
+.specs__cell {
+  background-color: var(--surface);
+  background-image: var(--grid-fine);
+  padding: clamp(1.375rem, 2.6vw, 2.25rem);
+  transition: background-color 0.27s var(--ease);
+}
+.specs__cell:hover { background-color: color-mix(in srgb, var(--surface) 88%, var(--ink)); }
+
+.specs__cell:first-child {
+  background-color: var(--surface-2);
+  background-image:
+    linear-gradient(150deg, var(--accent-soft) 0%, transparent 62%),
+    var(--grid-fine);
+}
+.specs__cell:first-child:hover { background-color: color-mix(in srgb, var(--surface-2) 90%, var(--ink)); }
+
+.specs__value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-size: var(--fs-num);
+  line-height: 0.92;
+  color: var(--accent);
+}
+.specs__unit {
+  font-size: 0.3em;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--ink-muted);
+}
+.specs__label {
+  margin-top: var(--s-3);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+  color: var(--ink-muted);
+  max-width: 18ch;
+}
+
+@media (max-width: 1023px) {
+  .specs { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 519px) {
+  .specs { grid-template-columns: 1fr; }
+  .specs__label { max-width: none; }
+}
+
+/* --------------------------------------------------------------------------
+   11. Capabilities. Layout family F: asymmetric 1 + 2 grid.
+   Exactly three cells for three items. Two of the three carry real background
+   variation (accent wash, faceplate grid) so this is not a text-on-text grid.
+   -------------------------------------------------------------------------- */
+.caps {
+  margin-top: clamp(1rem, 2vw, 1.5rem);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.caps__cell {
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border: 1px solid var(--line);
+  border-radius: var(--r-surface);
+  background: var(--surface);
+  transition: border-color 0.27s var(--ease), transform 0.27s var(--ease);
+}
+.caps__cell p {
+  margin-top: var(--s-3);
+  color: var(--ink-muted);
+  max-width: 52ch;
+}
+.caps__cell:hover { border-color: var(--line-strong); }
+@media (prefers-reduced-motion: no-preference) {
+  .caps__cell:hover { transform: translateY(-3px); }
+}
+
+.caps__title {
+  font-size: var(--fs-h3);
+  line-height: 1.18;
+  letter-spacing: -0.018em;
+}
+
+.caps__cell--lead {
+  grid-column: 1 / -1;
+  background:
+    var(--grid-fine),
+    linear-gradient(120deg, var(--accent-soft) 0%, transparent 58%),
+    var(--surface-2);
+  border-color: var(--line-strong);
+}
+.caps__cell--lead .caps__title { font-size: var(--fs-statement); }
+.caps__cell--lead p { max-width: 46ch; font-size: var(--fs-lead); color: var(--ink); }
+
+.caps__cell--tint {
+  background:
+    var(--grid-fine),
+    var(--surface-2);
+}
+
+@media (max-width: 767px) {
+  .caps { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------------------
+   12. Uses. Layout family G: the page's one full-bleed band.
+   Three uses divided by vertical rules, no boxes.
+   -------------------------------------------------------------------------- */
+.uses {
+  margin-top: var(--space-section);
+  padding-block: clamp(3rem, 6vw, 4.75rem);
+  background: var(--deep);
+  border-block: 1px solid var(--line);
+}
+
+.uses__row {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+/* these rules are the only structure in the band, so they take the stronger
+   hairline rather than the default one */
+.uses__item + .uses__item {
+  border-left: 1px solid var(--line-strong);
+  padding-left: clamp(1.5rem, 4vw, 3rem);
+}
+.uses__item p {
+  margin-top: var(--s-2);
+  color: var(--ink-muted);
+  font-size: var(--fs-sm);
+  max-width: 30ch;
+}
+
+.uses__title {
+  font-size: clamp(1.125rem, 1.8vw, 1.4375rem);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.uses__audience {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-sm);
+  color: var(--ink-faint);
+  max-width: 72ch;
+}
+
+@media (max-width: 767px) {
+  .uses__row { grid-template-columns: 1fr; gap: var(--s-5); }
+  .uses__item + .uses__item {
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--line);
+    padding-top: var(--s-5);
+  }
+  .uses__item p { max-width: none; }
+}
+
+/* --------------------------------------------------------------------------
+   13. Partners. Layout family H: credential band.
+   The mark is black-on-white artwork and must not be recoloured, so it keeps a
+   light plate inside the dark page. That is a contained asset, not a section
+   theme flip.
    -------------------------------------------------------------------------- */
 .partners {
   padding-block: var(--space-section);
   border-top: 1px solid var(--line);
 }
 
-.partners__title { margin-bottom: clamp(2rem, 4vw, 3rem); }
+.partners__title { margin-bottom: var(--space-block); }
 
 .partners__band {
   display: grid;
-  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
-  gap: clamp(1.5rem, 4vw, 3.5rem);
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  gap: clamp(1.75rem, 4vw, 3.5rem);
   align-items: center;
-  padding: clamp(1.5rem, 3vw, 2.25rem);
-  border: 1px solid var(--line);
-  border-radius: var(--r-surface);
-  background: var(--surface);
 }
 
-.partners__plate {
+.plate {
   background: var(--plate);
   border-radius: var(--r-control);
-  padding: 1.25rem 1.5rem;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  min-height: clamp(150px, 17vw, 210px);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.27s var(--ease);
+}
+.plate img { max-height: clamp(84px, 10vw, 130px); width: auto; object-fit: contain; }
+@media (prefers-reduced-motion: no-preference) {
+  .plate:hover { transform: translateY(-3px); }
 }
 
-.partners__name {
-  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
-  font-weight: 600;
-  line-height: 1.3;
+/* Grant credential copy. Required content, so it is set at readable size and
+   full contrast, not as fine print. */
+.partners__support {
+  font-size: var(--fs-lead);
+  line-height: 1.5;
   color: var(--ink);
+  max-width: 78ch;
+  padding-left: var(--s-4);
+  border-left: 2px solid var(--accent);
 }
+
 .partners__legal {
-  margin-top: 0.625rem;
-  font-size: var(--fs-sm);
+  margin-top: var(--s-4);
+  font-size: var(--fs-xs);
   line-height: 1.55;
-  color: var(--ink-muted);
-  max-width: 64ch;
+  color: var(--ink-faint);
+  max-width: 72ch;
 }
 
 @media (max-width: 767px) {
   .partners__band { grid-template-columns: 1fr; }
+  .plate { min-height: 150px; }
 }
 
 /* --------------------------------------------------------------------------
-   10. Contact + footer. Layout family: contact block over a footer row.
+   14. Contact + footer. Layout family I: accent-tinted close.
+   The one large-area accent moment below the fold. Still inside the dark
+   family in dark mode and the light family in light mode, so the page theme
+   never flips.
    -------------------------------------------------------------------------- */
 .contact {
   padding-block: var(--space-section);
+  background: var(--plane-accent);
   border-top: 1px solid var(--line);
 }
 
 .contact__main {
   display: grid;
-  gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  gap: clamp(1.25rem, 2.5vw, 2rem);
   justify-items: start;
-  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  padding-bottom: var(--space-block);
 }
 
-.contact__mail {
-  font-size: clamp(1.375rem, 3.5vw, 2.25rem);
+.contact__where {
+  font-size: var(--fs-statement);
   font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--accent);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.25s var(--ease);
-  overflow-wrap: anywhere;
+  line-height: 1.15;
+  letter-spacing: -0.022em;
+  color: var(--ink);
 }
-.contact__mail:hover { border-bottom-color: currentColor; }
 
 .contact__foot {
   display: flex;
@@ -590,7 +860,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   opacity: 0.7;
 }
 @media (prefers-color-scheme: light) {
-  /* the mark is white line art, so it needs inverting on a light ground */
+  /* the mark is white line art, so it needs inverting on a light ground.
+     The hero mark is excluded: that card is dark in both modes. */
   .contact__mark, .nav__brand img { filter: invert(1); }
 }
 
@@ -600,24 +871,78 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 /* --------------------------------------------------------------------------
-   11. Motion. MOTION_INTENSITY 5.
-   Reveals are quantized to a 90ms grid, echoing the looper's quantize step.
-   Transform and opacity only. Nothing here runs without JS, and nothing here
-   runs under prefers-reduced-motion.
+   15. Motion. MOTION_INTENSITY 6.
+   Every duration is a whole multiple of the 90ms quantize step, so the page
+   moves on the same grid the looper records on. Four reveal roles instead of
+   one, transform and opacity only. Nothing here runs without JS, and nothing
+   here runs under prefers-reduced-motion.
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: no-preference) {
+
   .js [data-reveal] {
     opacity: 0;
-    transform: translateY(18px);
-    transition:
-      opacity 0.6s var(--ease),
-      transform 0.6s var(--ease);
     transition-delay: calc(var(--i, 0) * var(--step));
+    transition-timing-function: var(--ease);
     will-change: transform, opacity;
   }
   .js [data-reveal].is-in {
     opacity: 1;
     transform: none;
+    clip-path: none;
     will-change: auto;
+  }
+
+  /* Watchdog escape hatch. If the document animation clock is stalled and a
+     transition never ran, main.js adds this and the end state applies at once,
+     whatever the variant's target opacity is. */
+  .js [data-reveal].is-settled { transition: none; }
+
+  /* type and prose: 6 steps */
+  .js [data-reveal="rise"] {
+    transform: translateY(20px);
+    transition-property: opacity, transform;
+    transition-duration: 540ms;
+  }
+
+  /* data tiles: 5 steps, shorter travel so a row of them reads as one gesture */
+  .js [data-reveal="tile"] {
+    transform: translateY(14px);
+    transition-property: opacity, transform;
+    transition-duration: 450ms;
+  }
+
+  /* media panels: 8 steps, a settle rather than a slide */
+  .js [data-reveal="media"] {
+    transform: scale(1.03);
+    clip-path: inset(0 0 12% 0 round var(--r-surface));
+    transition-property: opacity, transform, clip-path;
+    transition-duration: 720ms;
+  }
+
+  /* the brand watermark: 10 steps, slowest thing on the page */
+  .js [data-reveal="mark"] {
+    transform: scale(0.94);
+    transition-property: opacity, transform;
+    transition-duration: 900ms;
+  }
+  .js [data-reveal="mark"].is-in { opacity: 0.13; }
+
+  @media (max-width: 1023px) {
+    .js [data-reveal="mark"].is-in { opacity: 0.10; }
+  }
+}
+
+/* Scroll-driven drift on the hero photograph. Native CSS timeline, no scroll
+   listener, no library. Silently absent where unsupported. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__media img {
+      animation: hero-drift linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 90vh;
+    }
+    @keyframes hero-drift {
+      to { transform: translateY(5%) scale(1.07); }
+    }
   }
 }
