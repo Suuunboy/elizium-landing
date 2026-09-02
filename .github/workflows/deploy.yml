@@ -1,8 +1,19 @@
 name: Deploy to GitHub Pages
 
 # The site is plain static files with no build step, so the repository root is
-# published as-is. Enable Pages once under Settings > Pages > Source > GitHub
-# Actions, then every push to main republishes.
+# published as-is.
+#
+# ONE-TIME SETUP, required before this workflow can succeed:
+#   Repository Settings > Pages > Build and deployment > Source > GitHub Actions
+#
+# Until that is set, actions/configure-pages fails with
+# "Get Pages site failed ... Not Found", because there is no Pages site to
+# configure yet. The action's `enablement: true` input cannot be used to work
+# around it: that input explicitly requires a token other than GITHUB_TOKEN
+# (a PAT with `repo` scope, or a GitHub App with `administration:write`).
+#
+# Pages on a PRIVATE repository additionally requires GitHub Pro, Team or
+# Enterprise. On a Free plan the repository has to be public.
 
 on:
   push:
@@ -28,16 +39,18 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Configure Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
+      # include-hidden-files defaults to false, so .git and .github stay out of
+      # the published artifact.
       - name: Upload site
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: .
 
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
