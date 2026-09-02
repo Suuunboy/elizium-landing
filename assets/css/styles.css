@@ -1,0 +1,623 @@
+/* ==========================================================================
+   ЭЛИЗИУМ. Landing styles.
+   Aesthetic family: dark tech / instrument panel. This is an aesthetic, not an
+   official design system (no Material, Fluent, Carbon or Polaris here). Built
+   with native CSS custom properties.
+   Dials: DESIGN_VARIANCE 6, MOTION_INTENSITY 5, VISUAL_DENSITY 4.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Fonts. Self-hosted, font-display: swap.
+   TildaSans is the preserved brand type stack (variable, full Cyrillic).
+   JetBrains Mono (OFL-1.1, latin subset) carries technical numerals only.
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'TildaSans';
+  src: url('../fonts/TildaSans-VF.woff2') format('woff2-variations');
+  font-weight: 250 1000;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('../fonts/JetBrainsMono-latin.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+2000-206F, U+2212;
+}
+
+/* --------------------------------------------------------------------------
+   2. Tokens.
+   Ground is derived from the brand's own hero tint rgb(51,36,0): a warm
+   near-black rather than the pure #000 the old site used.
+   Accent holds the existing brand hue (13deg) from #FF8562, desaturated from
+   100% to 76% to satisfy the max-saturation rule, then re-tuned per mode so
+   contrast passes AA in both. One accent, one hue, whole page.
+   -------------------------------------------------------------------------- */
+:root {
+  color-scheme: dark light;
+
+  /* dark is the brand default */
+  --ground:      #0D0B08;
+  --surface:     #16130D;
+  --surface-2:   #211C14;
+  --plate:       #F4F3F0;   /* light plate for dark-only partner logos */
+  --line:        rgba(239, 237, 232, 0.13);
+  --line-strong: rgba(239, 237, 232, 0.26);
+  --ink:         #EFEDE8;
+  --ink-muted:   #ADA79F;
+  --ink-faint:   #8E887F;
+  --accent:      #E87454;
+  --accent-ink:  #12100C;
+  --accent-soft: rgba(232, 116, 84, 0.14);
+
+  /* one radius rule: surfaces 20px (brand token), controls 10px */
+  --r-surface: 20px;
+  --r-control: 10px;
+
+  /* type scale, governed */
+  --fs-display: clamp(2.75rem, 8.5vw, 6rem);
+  --fs-h2:      clamp(1.875rem, 4.2vw, 3.125rem);
+  --fs-h3:      clamp(1.15rem, 1.9vw, 1.5rem);
+  --fs-lead:    clamp(1.0625rem, 1.5vw, 1.3125rem);
+  --fs-body:    1.0625rem;
+  --fs-sm:      0.9375rem;
+  --fs-xs:      0.8125rem;
+
+  /* rhythm, VISUAL_DENSITY 4 band */
+  --space-section: clamp(4rem, 8vw, 6.5rem);
+  --gutter:        clamp(1.25rem, 4vw, 3rem);
+  --maxw:          1400px;
+  --nav-h:         72px;
+
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --step: 90ms;            /* quantized reveal grid */
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --ground:      #F1F1EF;
+    --surface:     #F8F8F6;
+    --surface-2:   #E9E9E5;
+    --plate:       #FDFDFC;   /* off-white, never pure #fff */
+    --line:        rgba(20, 18, 16, 0.14);
+    --line-strong: rgba(20, 18, 16, 0.28);
+    --ink:         #141210;
+    --ink-muted:   #55514B;
+    --ink-faint:   #6B665F;
+    --accent:      #A8482A;
+    --accent-ink:  #FBF9F6;
+    --accent-soft: rgba(168, 72, 42, 0.10);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. Base
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--nav-h) + 1.5rem);
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: 'TildaSans', Arial, sans-serif;
+  font-size: var(--fs-body);
+  font-weight: 300;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;   /* replaces the old word-break: break-all */
+}
+
+img { max-width: 100%; height: auto; display: block; }
+picture { display: block; }
+
+a { color: inherit; }
+
+h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.015em; }
+
+p { margin: 0; }
+
+ul { margin: 0; padding: 0; list-style: none; }
+
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.h2 {
+  font-size: var(--fs-h2);
+  line-height: 1.08;
+}
+.h3 {
+  font-size: var(--fs-h3);
+  line-height: 1.25;
+}
+.lead {
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  max-width: 62ch;
+}
+
+/* mono numerals, the only place the mono face appears */
+.num {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 600;
+  font-size: 1.15em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--r-control);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+.skip-link:focus {
+  left: var(--gutter);
+  top: 0.75rem;
+}
+
+.nav-sentinel {
+  display: block;
+  height: 1px;
+  margin-top: -1px;
+}
+
+/* --------------------------------------------------------------------------
+   4. Button. One CTA intent on this page ("Написать нам"), one label, one style.
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;              /* CTA never wraps */
+  padding: 0.875rem 1.75rem;
+  border-radius: var(--r-control);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: transform 0.25s var(--ease), background-color 0.25s var(--ease);
+}
+.btn:hover { background: color-mix(in srgb, var(--accent) 88%, var(--ink)); }
+.btn:active { transform: scale(0.98); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(0) scale(0.98); }
+}
+
+/* --------------------------------------------------------------------------
+   5. Navigation. One line at desktop, 72px tall. Preserved split composition:
+   two links, centred brand mark, two links.
+   -------------------------------------------------------------------------- */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--ground) 86%, transparent);
+  backdrop-filter: saturate(140%) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s var(--ease), background-color 0.3s var(--ease);
+}
+.nav.is-stuck {
+  border-bottom-color: var(--line);
+  background: color-mix(in srgb, var(--ground) 94%, transparent);
+}
+
+.nav__inner {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  height: var(--nav-h);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav__group {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 2.25rem);
+}
+.nav__group--end { justify-content: flex-end; }
+
+.nav__link {
+  position: relative;
+  font-size: var(--fs-sm);
+  font-weight: 400;
+  color: var(--ink-muted);
+  text-decoration: none;
+  padding-block: 0.25rem;
+  transition: color 0.25s var(--ease);
+}
+.nav__link:hover { color: var(--ink); }
+.nav__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--ease);
+}
+.nav__link:hover::after { transform: scaleX(1); }
+
+.nav__brand { display: block; line-height: 0; }
+.nav__brand img { width: 44px; height: 44px; }
+
+.nav__burger {
+  display: none;
+  grid-column: 3;
+  justify-self: end;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 5px;
+}
+.nav__burger span {
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  background: var(--ink);
+  transition: transform 0.3s var(--ease), opacity 0.2s var(--ease);
+}
+.nav__burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav__burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav__burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+.nav__mobile {
+  display: none;
+  flex-direction: column;
+  padding: 0.5rem var(--gutter) 1.5rem;
+  border-top: 1px solid var(--line);
+}
+.nav__mobile-link {
+  padding: 0.9rem 0;
+  font-size: 1.0625rem;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+}
+.nav__mobile-link:last-child { border-bottom: 0; }
+
+@media (max-width: 767px) {
+  .nav__group { display: none; }
+  .nav__inner { grid-template-columns: 1fr auto; }
+  .nav__brand { grid-column: 1; justify-self: start; }
+  .nav__burger { display: flex; grid-column: 2; }
+  .nav__mobile:not([hidden]) { display: flex; }
+}
+
+/* --------------------------------------------------------------------------
+   6. Hero. Layout family: overlay cover.
+   Content anchored bottom-left with a large empty zone to the right.
+   Preserves the brand's inset card and 20px radius.
+   -------------------------------------------------------------------------- */
+.hero { padding: var(--gutter); }
+
+.hero__card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--r-surface);
+  min-height: min(calc(100dvh - var(--nav-h) - (var(--gutter) * 2)), 860px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* Fixed dark in BOTH modes. This is a photographic surface and the copy on it
+     is always light, so the pre-load fallback must never resolve to a light
+     token: that would render near-white text on a near-white card. */
+  background: #14110B;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 45%;
+}
+
+/* preserved brand tint: the old rgba(51,36,0) warm-black wash, re-weighted
+   toward the bottom so the bottom-left copy clears AA */
+.hero__tint {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg,
+      rgba(33, 24, 0, 0.40) 0%,
+      rgba(12, 9, 5, 0.55) 42%,
+      rgba(8, 6, 4, 0.90) 100%);
+}
+
+.hero__content {
+  padding: clamp(1.75rem, 5vw, 4rem);
+  padding-top: clamp(4rem, 10vw, 6rem);   /* well under the pt-24 cap */
+  max-width: 54rem;
+}
+
+.hero__title {
+  font-size: var(--fs-display);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: #F7F5F0;
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+}
+
+.hero__lead {
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  color: #E4E0D8;
+  max-width: 44ch;
+  margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+}
+
+.hero__actions { display: flex; gap: 0.875rem; flex-wrap: wrap; }
+
+/* The hero card stays dark in both modes, so the brand's dark expression
+   survives light mode. No border is needed: the dark card separates itself
+   from the light ground on its own. */
+
+@media (max-width: 767px) {
+  .hero__card { min-height: calc(100dvh - var(--nav-h) - (var(--gutter) * 2)); }
+  .hero__content { max-width: none; }
+  .hero__lead { max-width: none; }
+  .hero__actions .btn { width: 100%; }
+}
+
+/* --------------------------------------------------------------------------
+   7. About. Layout family: typographic asymmetric grid, no image.
+   Header stacks vertically (no split-header), body indents on a later row.
+   -------------------------------------------------------------------------- */
+.about { padding-block: var(--space-section); }
+
+.about__grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.about__head { grid-column: 1 / 9; }
+
+/* Same slot as .product__sub, so same treatment. The accent is reserved for a
+   single role on this page: action and data (CTAs, the email link, the mono
+   figures, nav underline, focus ring). It is not a decorative text colour. */
+.about__sub {
+  margin-top: 0.875rem;
+  font-size: var(--fs-lead);
+  font-weight: 400;
+  color: var(--ink-muted);
+  max-width: 34ch;
+}
+
+.about__body {
+  grid-column: 4 / 12;
+  margin-top: clamp(1rem, 3vw, 2.75rem);
+}
+
+@media (max-width: 767px) {
+  .about__grid { grid-template-columns: 1fr; }
+  .about__head, .about__body { grid-column: 1; }
+  .about__body { margin-top: 0.5rem; }
+}
+
+/* --------------------------------------------------------------------------
+   8. Product. Layout family: split asset + text with vertical offset.
+   The panel sketch is a light asset, so it sits on its own framed plate.
+   -------------------------------------------------------------------------- */
+.product {
+  padding-block: var(--space-section);
+  border-top: 1px solid var(--line);
+}
+
+.product__head { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+
+.product__sub {
+  margin-top: 0.875rem;
+  font-size: var(--fs-lead);
+  color: var(--ink-muted);
+  max-width: 40ch;
+}
+
+.product__grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+  align-items: start;
+}
+
+.product__figure {
+  grid-column: 1 / 8;
+  margin: 0;
+  border-radius: var(--r-surface);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+}
+.product__figure img { width: 100%; }
+
+.product__text {
+  grid-column: 8 / 13;
+  margin-top: clamp(0rem, 3vw, 2.5rem);   /* the offset that breaks the symmetry */
+  display: grid;
+  gap: 1.25rem;
+}
+.product__text p {
+  color: var(--ink-muted);
+  max-width: 46ch;
+}
+.product__text .h3 { color: var(--ink); max-width: 22ch; }
+
+@media (max-width: 1023px) {
+  .product__figure { grid-column: 1 / 13; }
+  .product__text { grid-column: 1 / 13; margin-top: 0; }
+  .product__text p, .product__text .h3 { max-width: 62ch; }
+}
+
+/* --------------------------------------------------------------------------
+   9. Partners. Layout family: horizontal credential band.
+   The FASIE mark is black-on-white artwork and must not be recoloured, so it
+   keeps a light plate inside the dark page. This is a contained asset, not a
+   section theme flip.
+   -------------------------------------------------------------------------- */
+.partners {
+  padding-block: var(--space-section);
+  border-top: 1px solid var(--line);
+}
+
+.partners__title { margin-bottom: clamp(2rem, 4vw, 3rem); }
+
+.partners__band {
+  display: grid;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid var(--line);
+  border-radius: var(--r-surface);
+  background: var(--surface);
+}
+
+.partners__plate {
+  background: var(--plate);
+  border-radius: var(--r-control);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.partners__name {
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+}
+.partners__legal {
+  margin-top: 0.625rem;
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--ink-muted);
+  max-width: 64ch;
+}
+
+@media (max-width: 767px) {
+  .partners__band { grid-template-columns: 1fr; }
+}
+
+/* --------------------------------------------------------------------------
+   10. Contact + footer. Layout family: contact block over a footer row.
+   -------------------------------------------------------------------------- */
+.contact {
+  padding-block: var(--space-section);
+  border-top: 1px solid var(--line);
+}
+
+.contact__main {
+  display: grid;
+  gap: clamp(1.25rem, 2.5vw, 1.75rem);
+  justify-items: start;
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+
+.contact__mail {
+  font-size: clamp(1.375rem, 3.5vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s var(--ease);
+  overflow-wrap: anywhere;
+}
+.contact__mail:hover { border-bottom-color: currentColor; }
+
+.contact__foot {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+  border-top: 1px solid var(--line);
+}
+.contact__mark {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  opacity: 0.7;
+}
+@media (prefers-color-scheme: light) {
+  /* the mark is white line art, so it needs inverting on a light ground */
+  .contact__mark, .nav__brand img { filter: invert(1); }
+}
+
+.contact__legal {
+  font-size: var(--fs-xs);
+  color: var(--ink-faint);
+}
+
+/* --------------------------------------------------------------------------
+   11. Motion. MOTION_INTENSITY 5.
+   Reveals are quantized to a 90ms grid, echoing the looper's quantize step.
+   Transform and opacity only. Nothing here runs without JS, and nothing here
+   runs under prefers-reduced-motion.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.6s var(--ease),
+      transform 0.6s var(--ease);
+    transition-delay: calc(var(--i, 0) * var(--step));
+    will-change: transform, opacity;
+  }
+  .js [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+}
